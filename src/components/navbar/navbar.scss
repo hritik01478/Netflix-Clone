@@ -5,6 +5,7 @@
     width: 100%;
     z-index: 999;
     background: linear-gradient(to top, transparent 0%, rgb(0, 0, 0, 0.3) 50%);
+    transition: all 0.3s ease-in;
 
     &.scrolled {
         background: var(--main-color);
