@@ -1,12 +1,35 @@
 import './featured.scss'
 import { PlayArrow, InfoOutlined } from '@mui/icons-material';
+import { useEffect, useState } from 'react'
+import axios from 'axios';
 
 const Featured = ({ type }) => {
+    const [content, setContent] = useState({});
+    // const imgTitle = "https://occ-0-1432-1433.1.nflxso.net/dnm/api/v6/LmEnxtiAuzezXBjYXPuDgfZ4zZQ/AAAABUZdeG1DrMstq-YKHZ-dA-cx2uQN_YbCYx7RABDk0y7F8ZK6nzgCz4bp5qJVgMizPbVpIvXrd4xMBQAuNe0xmuW2WjoeGMDn1cFO.webp?r=df1"
+
+    useEffect(() => {
+        const getRandomContent = async () => {
+            try {
+                const randomMovie = await axios.get(`movies/random${type ? "?type=" + type : ""}`, {
+                    headers: {
+                        token: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyZTIzODQ0NzJiNjNmYzNhZjIzOGI5MyIsImlzQWRtaW4iOnRydWUsImlhdCI6MTY1OTQzMzgwNywiZXhwIjoxNjU5ODY1ODA3fQ.lkDa7fyBXk2pZXHAiJwJhgLf70AOQYJ-NhZcDqxUQo4"
+                    }
+                });
+                setContent(randomMovie.data[0]);
+                // console.log(content);
+
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        getRandomContent();
+    }, [type]);
+
     return (
         <div className='featured'>
             {type && (
                 <div className="category">
-                    <span>{type === 'movie' ? "Movies" : "Series"}</span>
+                    <span>{type === 'movies' ? "Movies" : "Series"}</span>
                     <select name="genre" id="genre">
                         <option>Genre</option>
                         <option value="adventure">Adventure</option>
@@ -25,11 +48,11 @@ const Featured = ({ type }) => {
                     </select>
                 </div>
             )}
-            <img src="https://images.pexels.com/photos/6899260/pexels-photo-6899260.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500" alt="" />
+            <img src={content.img} alt="" />
 
             <div className="info">
-                <img src="https://occ-0-1432-1433.1.nflxso.net/dnm/api/v6/LmEnxtiAuzezXBjYXPuDgfZ4zZQ/AAAABUZdeG1DrMstq-YKHZ-dA-cx2uQN_YbCYx7RABDk0y7F8ZK6nzgCz4bp5qJVgMizPbVpIvXrd4xMBQAuNe0xmuW2WjoeGMDn1cFO.webp?r=df1" alt="" />
-                <span className="desc">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptas, dolore cumque laborum temporibus debitis asperiores odio doloremque adipisci at. Voluptate soluta similique placeat. Voluptatum optio voluptas non officia corporis deserunt?</span>
+                <img src={content.imgTitle} alt="" />
+                <span className="desc">{content.desc}</span>
                 <div className="buttons">
                     <button className="play">
                         <PlayArrow />
